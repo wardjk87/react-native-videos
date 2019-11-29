@@ -14,6 +14,7 @@ import Constants from './Constants';
 import GameOver from './GameOver';
 import Clear from './Clear';
 import Pause from './Pause';
+import Mole from './Mole';
 
 const DEFAULT_TIME = 25;
 const DEFAULT_STATE = {
@@ -30,6 +31,7 @@ export default class App extends Component {
     constructor(props){
         super(props);
         this.state = DEFAULT_STATE;
+        this.moles = [];
     }
 
     componentDidMount = () => {
@@ -96,6 +98,32 @@ export default class App extends Component {
                     </SafeAreaView>
                 </View>
                 <View style={styles.playArea}>
+                    {Array.apply(null, Array(4)).map((el, rowIndex) => {
+                        return (
+                            <View
+                                style={styles.playRow}
+                                key={rowIndex}
+                            >
+                                {Array.apply(null, Array(3)).map((el, columnIndex) => {
+                                    let moleIndex = (rowIndex * 3) + columnIndex;
+                                    return(
+                                        <View
+                                            style={styles.playCell}
+                                            key={columnIndex}
+                                        >
+                                            <Mole
+                                                index={moleIndex}
+                                                ref={(ref) => {this.moles[moleIndex] = ref}}
+                                            />
+                                        </View>
+                                    )
+                                })}
+                            </View>
+                        )
+                    }
+
+                        )
+                    })}
                     
                 </View>
                 {this.state.cleared && <Clear onReset={this.reset} onNextLevel={this.nextLevel} level={this.state.level} score={this.state.score} />}
